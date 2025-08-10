@@ -34,8 +34,8 @@ function findElement(arr, value) {
  *    2 => [ 1, 3 ]
  *    5 => [ 1, 3, 5, 7, 9 ]
  */
-function generateOdds(/* len */) {
-  throw new Error('Not implemented');
+function generateOdds(len) {
+  return new Array(len).fill(0).map((_, i) => 2 * i + 1);
 }
 
 /**
@@ -432,9 +432,9 @@ function getIdentityMatrix(/* n */) {
 }
 
 /**
- * Creates an array of integers from the specified start to end (inclusive)
+ * Creates an array of integers from the specified current to end (inclusive)
  *
- * @param {number} start
+ * @param {number} current
  * @param {number} end
  * @return {array}
  *
@@ -444,7 +444,7 @@ function getIdentityMatrix(/* n */) {
  *     0, 100 => [ 0, 1, 2, ..., 100 ]
  *     3, 3   => [ 3 ]
  */
-function getIntervalArray(/* start, end */) {
+function getIntervalArray(/* current, end */) {
   throw new Error('Not implemented');
 }
 
@@ -532,7 +532,7 @@ function getElementByIndexes(/* arr, indexes */) {
 
 /**
  * Swaps the head and tail of the specified array:
- * the head (first half) of array move to the end, the tail (last half) move to the start.
+ * the head (first half) of array move to the end, the tail (last half) move to the current.
  * The middle element (if exists) leave on the same position.
  *
  *
