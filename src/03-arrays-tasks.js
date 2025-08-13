@@ -226,8 +226,17 @@ function toArrayOfSquares(arr) {
  *   [ 0, 0, 0, 0, 0]         => [ 0, 0, 0, 0, 0]
  *   [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 ] => [ 1, 3, 6, 10, 15, 21, 28, 36, 45, 55 ]
  */
-function getMovingSum(/* arr */) {
-  throw new Error('Not implemented');
+function getMovingSum(arr) {
+  const newArr = [];
+  if (!arr.length) {
+    return newArr;
+  }
+  const result = arr.reduce((acc, value) => {
+    newArr.push(acc);
+    return acc + value;
+  });
+  newArr.push(result);
+  return newArr;
 }
 
 /**
@@ -241,8 +250,8 @@ function getMovingSum(/* arr */) {
  * [ 'a', 'b', 'c' , null ]  => [ "b", null ]
  * [ "a" ] => []
  */
-function getSecondItems(/* arr */) {
-  throw new Error('Not implemented');
+function getSecondItems(arr) {
+  return arr.filter((_, index) => index % 2);
 }
 
 /**
@@ -276,8 +285,11 @@ function propagateItemsByPositionIndex(/* arr */) {
  *   [ 1,2,3,4,5,6,7,8,9,10 ] => [ 10, 9, 8 ]
  *   [ 10, 10, 10, 10 ] => [ 10, 10, 10 ]
  */
-function get3TopItems(/* arr */) {
-  throw new Error('Not implemented');
+function get3TopItems(arr) {
+  if (arr.length < 3) {
+    return arr.sort((a, b) => b - a);
+  }
+  return arr.splice(-3).sort((a, b) => b - a);
 }
 
 /**
