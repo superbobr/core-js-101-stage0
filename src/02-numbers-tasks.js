@@ -112,8 +112,33 @@ function getLinearEquationRoot(a, b) {
  *   (0,1) (0,1)     => 0
  *   (0,1) (1,2)     => 0
  */
-function getAngleBetweenVectors(/* x1, y1, x2, y2 */) {
-  throw new Error('Not implemented');
+/**
+ * Returns the angle between two 2D vectors in radians
+ *
+ * @param {number} x1 - x coordinate of first vector
+ * @param {number} y1 - y coordinate of first vector
+ * @param {number} x2 - x coordinate of second vector
+ * @param {number} y2 - y coordinate of second vector
+ * @return {number} angle in radians (0 to π)
+ *
+ * @example
+ * getAngleBetweenVectors(1, 0, 0, 1) => π/2
+ * getAngleBetweenVectors(0, 1, 0, -1) => π
+ * getAngleBetweenVectors(0, -1, 1, 0) => π/2
+ * getAngleBetweenVectors(0, 1, 0, 1) => 0
+ */
+function getAngleBetweenVectors(x1, y1, x2, y2) {
+  const m1 = Math.sqrt(x1 * x1 + y1 * y1);
+  const m2 = Math.sqrt(x2 * x2 + y2 * y2);
+
+  if (m1 === 0 || m2 === 0) {
+    return 0;
+  }
+  const dP = x1 * x2 + y1 * y2;
+  const cA = dP / (m1 * m2);
+  const clamCosA = Math.max(-1, Math.min(1, cA));
+
+  return Math.acos(clamCosA);
 }
 
 /**
