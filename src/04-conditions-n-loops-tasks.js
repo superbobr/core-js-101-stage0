@@ -271,10 +271,30 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
-}
+function isCreditCardNumber(ccn) {
+  const digits = String(ccn).replace(/\s/g, '');
 
+  if (!/^\d+$/.test(digits) || digits.length <= 1) {
+    return false;
+  }
+
+  const nums = digits.split('').map(Number);
+
+  const sum =
+    nums
+      .slice(0, -1)
+      .reverse()
+      .map((num, index) => {
+        if (index % 2 === 0) {
+          const doubled = num * 2;
+          return doubled > 9 ? doubled - 9 : doubled;
+        }
+        return num;
+      })
+      .reduce((acc, num) => acc + num, 0) + nums[nums.length - 1];
+
+  return sum % 10 === 0;
+}
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
@@ -289,8 +309,14 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  const result = String(num)
+    .split('')
+    .reduce((acc, value) => acc + Number(value), 0);
+  const newResult = String(result)
+    .split('')
+    .reduce((acc, value) => acc + Number(value), 0);
+  return newResult;
 }
 
 /**
@@ -314,8 +340,33 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str) {
+  const stack = [];
+  const openToClose = {
+    '(': ')',
+    '[': ']',
+    '{': '}',
+    '<': '>',
+  };
+  const closeSet = new Set([')', ']', '}', '>']);
+
+  return (
+    str.split('').reduce((isValid, char) => {
+      if (!isValid) return false;
+      if (openToClose[char]) {
+        stack.push(char);
+        return true;
+      }
+      if (closeSet.has(char)) {
+        const lastOpen = stack.pop();
+        if (!lastOpen || openToClose[lastOpen] !== char) {
+          return false;
+        }
+        return true;
+      }
+      return true;
+    }, true) && stack.length === 0
+  );
 }
 
 /**
@@ -338,14 +389,26 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  if (num === 0) {
+    return '0';
+  }
+
+  const digits = [];
+
+  let current = num;
+  while (current > 0) {
+    digits.push(current % n);
+    current = Math.floor(current / n);
+  }
+
+  return digits.reverse().join('');
 }
 
 /**
  * Returns the common directory path for specified array of full filenames.
  *
- * @param {array} pathes
+ * @param {array} paths
  * @return {string}
  *
  * @example:
@@ -354,8 +417,22 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(paths) {
+  if (paths.length === 0) return '';
+  const splitPaths = paths.map((path) => path.split('/'));
+  const minLength = Math.min(...splitPaths.map((parts) => parts.length));
+  const commonParts = Array.from(
+    { length: minLength },
+    (_, i) => splitPaths[0][i]
+  ).filter((part, i) => splitPaths.every((path) => path[i] === part));
+  if (commonParts.length === 0) {
+    return splitPaths.every((path) => path[0] === '') ? '/' : '';
+  }
+  let result = commonParts.join('/');
+  if (commonParts[0] === '') {
+    result = `/${commonParts.slice(1).join('/')}`;
+  }
+  return result === '/' ? '/' : `${result}/`;
 }
 
 /**
@@ -376,8 +453,18 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  if (!m1.length || !m2.length || m1[0].length !== m2.length) {
+    return [];
+  }
+  return m1.map((row) =>
+    m2[0].map((_, colIndex) =>
+      row.reduce(
+        (sum, cell, cellIndex) => sum + cell * m2[cellIndex][colIndex],
+        0
+      )
+    )
+  );
 }
 
 /**
@@ -410,8 +497,64 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const winningLines = [
+    [
+      [0, 0],
+      [0, 1],
+      [0, 2],
+    ],
+    [
+      [1, 0],
+      [1, 1],
+      [1, 2],
+    ],
+    [
+      [2, 0],
+      [2, 1],
+      [2, 2],
+    ],
+    [
+      [0, 0],
+      [1, 0],
+      [2, 0],
+    ],
+    [
+      [0, 1],
+      [1, 1],
+      [2, 1],
+    ],
+    [
+      [0, 2],
+      [1, 2],
+      [2, 2],
+    ],
+    [
+      [0, 0],
+      [1, 1],
+      [2, 2],
+    ],
+    [
+      [0, 2],
+      [1, 1],
+      [2, 0],
+    ],
+  ];
+
+  const winningLine = winningLines.find(([a, b, c]) => {
+    const [rowA, colA] = a;
+    const [rowB, colB] = b;
+    const [rowC, colC] = c;
+    const valA = position[rowA][colA];
+    const valB = position[rowB][colB];
+    const valC = position[rowC][colC];
+
+    return valA !== undefined && valA === valB && valB === valC;
+  });
+
+  return winningLine
+    ? position[winningLine[0][0]][winningLine[0][1]]
+    : undefined;
 }
 
 module.exports = {
